@@ -101,10 +101,17 @@ class Field:
 
         # TODO if out of bounds, don't actually place the ship    
 
-        # TODO places all of ship points based on length in a specific orientation VERT / HORIZ
+        # TODO determine placement based on orientation
+        # HORIZONTAL ships
+        for i in range(ship.length):
+            self.__matrix[matrixRow][int(matrixCol)+i] = 1
+
+        # VERTICAL ships
+        # for i in range(ship.length):
+        #    self.__matrix[matrixRow + i][int(matrixCol)] = 1
 
         # places 1 in the start point of ship placement
-        self.__matrix[matrixRow][int(matrixCol)] = 1
+        # self.__matrix[matrixRow][int(matrixCol)] = 1
 
 
 
@@ -124,6 +131,16 @@ class Field:
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+    def __convert_coordinate(self, coordinate):
+        columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+        column_letter = coordinate[0]
+        row = coordinate[1] - 1
+
+        column_letter = column_letter.upper()
+        column = columns.index(column_letter)
+
+        return [row, column]
 
     # converting to string variable
     def __str__(self):
