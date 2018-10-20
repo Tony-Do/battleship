@@ -4,6 +4,18 @@
 import ship
 
 
+
+
+####################################################
+# CLASS MatrixBlock
+# --------------------------------------------------
+# A block of the matrix
+####################################################
+class MatrixBlock:
+
+    hasShip = False
+    hasBeenShot = False
+
 ####################################################
 # CLASS Player
 # --------------------------------------------------
@@ -70,10 +82,10 @@ class Field:
     # PUBLIC METHODS
     # place a ship into field
     # convert coordinate to matrix format and place ship according to orientation
-    def place(self, ship, coordinate, orientation):
+    def place(self, ship, coordinate, rawOrientation):
 
         # prints all placement info
-        print("Placing ship at " + coordinate + " with orientation of " + orientation)
+        print("Placing ship at " + coordinate + " with orientation of " + rawOrientation)
 
         # convert Column from letter to number
         matrixCol = ord(coordinate[0])-65
@@ -81,47 +93,29 @@ class Field:
         matrixRow = int(coordinate[1]) - 1
         print(matrixRow)
 
-        # TODO need to check orientation to determine placement algorithm
-        if orientation is ship.Orientation.HORIZONTAL:
+        # determines endpoint for VERTICAL/HORIZONTAL placement of ships, if > 10 it is out of bounds
+        #TODO THIS STILL DOESNT WORK DAMN IT
 
-        elif orientation is ship.Orientation.VERTICAL:
-
+        rawOrientation = rawOrientation.lower()
+        if rawOrientation == "horizontal":
+            print("Entered horizontal placement")
+            end_point = ship.length + int(matrixRow)
+            if end_point > 10:
+                print('{0} = OUT OF BOUNDS'.format(str(end_point)))
+            for i in range(ship.length):
+                self.__matrix[matrixRow][int(matrixCol) + i] = 1
+        elif rawOrientation == "vertical":
+            print("Entered vertical placement")
+            end_point = ship.length + int(matrixCol)
+            if end_point > 10:
+                print('{0} = OUT OF BOUNDS'.format(str(end_point)))
+            for i in range(ship.length):
+                self.__matrix[matrixRow + i][int(matrixCol)] = 1
         else:
-            print("*** Error - " + orientation + " is an invalid orientation (Please choose vertical/horizontal)")
-        print(orientation)
-        if orientation is 2:
-            print("IM VERTICAL IF STATEMENT")
+            print("*** Error - " + rawOrientation + " is an invalid orientation (Please choose vertical/horizontal)")
+        print(rawOrientation)
 
-        # determines endpoint for VERTICAL placement of ships, if > 10 it is out of bounds
-        # TODO add if VERTICAL
-        end_point = ship.length + int(matrixRow)
-        if end_point > 10:
-            print('{0} = OUT OF BOUNDS'.format(str(end_point)))
-
-        # determines endpoint for HORIZONTAL placement of ships, if > 10 it is out of bounds
-        # TODO add if HORIZONTAL
-        end_point = ship.length + int(matrixCol)
-        if end_point > 10:
-            print('{0} = OUT OF BOUNDS'.format(str(end_point)))
-
-        # TODO if out of bounds, don't actually place the ship    
-
-        # TODO determine placement based on orientation
-        # HORIZONTAL ships
-        for i in range(ship.length):
-            self.__matrix[matrixRow][int(matrixCol)+i] = 1
-
-        # VERTICAL ships
-        # for i in range(ship.length):
-        #    self.__matrix[matrixRow + i][int(matrixCol)] = 1
-
-        # places 1 in the start point of ship placement
-        # self.__matrix[matrixRow][int(matrixCol)] = 1
-
-
-
-
-
+        # TODO if out of bounds, don't actually place the ship
 
     # PRIVATE METHODS
     # init_matrix - returns an initialized matrix. For internal class use only
