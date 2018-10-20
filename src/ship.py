@@ -1,5 +1,6 @@
 # IMPORTS
 import enum
+import random
 
 ##########################################
 # CLASS Ship
@@ -21,6 +22,9 @@ class Ship:
 
     def get_name(self):
         return self.name
+
+    def __len__(self):
+        return self.length
 
 
 ##########################################
@@ -62,10 +66,26 @@ class ShipSet:
                 break
         print("ShipSet:pop:result = " + str(result))
         return result
+
+    def get(self, ship_name):
+        result = None
+        for ship in self.ships:
+            if ship.get_name() == ship_name:
+                index = self.ships.index(ship)
+                result = self.ships[index]
+                break
+        print("ShipSet:get:result = " + str(result))
+        return result
+
+    def get_random(self):
+        index = random.randint(0, len(self.ships))
+        return self.ships[index]
         
     # def get_ships(self):
 
     # OVERRIDEN METHODS
+    def __len__(self):
+        return len(self.ships)
     def __str__(self):
         output = ""
         for ship in self.ships:

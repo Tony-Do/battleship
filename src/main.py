@@ -34,15 +34,24 @@ class Console(cmd.Cmd):
             ship_name = commands[0]
             coordinate = commands[1]
             orientation = commands[2]
-            success = self.player.place_ship(ship_name, coordinate, orientation)
-            if success:
-                print(ship_name + " has been placed at " + coordinate)
-            else:
-                print(ship_name + " failed to be placed")
-
+            try:
+                self.player.place_ship(ship_name, coordinate, orientation)
+            except Exception as e:
+                print(e)
             self.prompt = str(self.player) + "\n> "
         else:
             print("*** invalid number of arguments. See 'help place'")
+
+    def do_attack(self, args):
+        """attack <coordinate>\t- This command attacks the corresponding enemy square"""
+        commands = self.__parse_input(args)
+        if len(commands) == 1:
+            try:
+                self.player.attack(commands[0])
+            except Exception as e:
+                print(e)
+        else:
+            print("*** invalid number of arguments")
 
     def do_exit(self, args):
         """exit - Exits the program"""
