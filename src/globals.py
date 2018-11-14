@@ -1,0 +1,36 @@
+# COLORS
+RED = (255, 0, 0)
+BLUE = (0, 50, 255)
+ORANGE = (255, 69, 0)
+COLBACKGROUND = (70, 60, 60)
+COLBUTTON = RED
+COLTEXT = RED
+COLHIGHLIGHT = RED
+COL3DTEXT = BLUE
+COLTILE = BLUE
+COLUSERSHIPS = (30, 30, 50)
+COLSHIP = ORANGE
+
+WINDOWWIDTH = 1200
+WINDOWHEIGHT = 800
+BOARDAREA = 200     # Surface of the game board
+BOARDXTILES = 10    # Number of tiles
+BOARDYTILES = 10    # Number of tiles
+TILESIZE = 30
+
+BUTTONHEIGHT = 40
+BUTTONWIDTH = 60
+
+TEXTSIZE = 25       # Size of the text
+TEXTPOS = 10        # Where the text will be positioned
+
+EFFECTFPS = 15      # FPS for effects
+GAMEFPS = 100       # FPS for overall game
+CLICKSPEED = 10      # Determines the speed at which the squares reveals after being clicked
+
+# TOP LEFT OF BOARDS
+BOARDONEXPOINT = (((WINDOWWIDTH - (BOARDXTILES * TILESIZE) - BOARDAREA) / 2) - 320)
+BOARDONEYPOINT = (((WINDOWHEIGHT - (BOARDYTILES * TILESIZE)) / 2) - 220)
+
+BOARDTWOXPOINT = (((WINDOWWIDTH - (BOARDXTILES * TILESIZE) - BOARDAREA) / 2) - 320)
+BOARDTWOYPOINT = (((WINDOWHEIGHT - (BOARDYTILES * TILESIZE)) / 2) + 150)
