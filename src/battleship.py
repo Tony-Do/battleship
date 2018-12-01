@@ -75,8 +75,8 @@ def main_game_loop():
         WINDOWSURFACE.blit(LOCRESET, RESETRECT)
         draw_boards(user_board, shown_user_tiles, 1)
         draw_boards(opponent_board, shown_opponent_tiles, 2)
-        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 70, 300, 300), 2)
-        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 437, 300, 300), 2)
+        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 70, 300, 300), 5)
+        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 438, 300, 300), 5)
 
         mouse_clicked = False
 
