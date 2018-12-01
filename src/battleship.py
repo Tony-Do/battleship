@@ -140,16 +140,14 @@ def ai_turn(opponent_board,shown_opponent_tiles,check_reveal_tile,user_board,sho
     Clicks returned tile, reveals on board 2.
     Displays if the AI shot was a hit or miss.
     """
-    AI_X, AI_Y = ai_find_tile(opponent_board,matrix)
+    AI_X, AI_Y = ai_find_tile(opponent_board, matrix)
     if AI_X is not None and AI_Y is not None:
         if not shown_opponent_tiles[AI_X][AI_Y]:
-            mouseover_highlight(AI_X,AI_Y)
+            mouseover_highlight(AI_X, AI_Y)
         if not shown_opponent_tiles[AI_X][AI_Y]:
-            reveal_tile_animation(opponent_board, [(AI_X,AI_Y)])
             shown_opponent_tiles[AI_X][AI_Y] = True
             if check_reveal_tile(opponent_board, [(AI_X, AI_Y)]):
-                left, top = find_top_left_pos(AI_X,AI_Y,1)
-                effect_animation((left,top))
+                left, top = find_top_left_pos(AI_X, AI_Y, 1)
                 if check_for_win(user_board,shown_user_tiles):
                     return "USERS"
                 if check_for_win(opponent_board, shown_opponent_tiles):
@@ -160,7 +158,7 @@ def ai_find_tile(opponent_board,matrix):
     """
     Chooses a random tile
     """
-    ## check through the matrix to make sure it hasn't been selected already##
+    # Check through the matrix to make sure it hasn't been selected already##
     usable = True
     
     while(usable):
