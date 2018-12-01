@@ -18,10 +18,13 @@ def main():
     Setup of game components
     """
     global WINDOWSURFACE, GLOBALCLOCK, FONTSIZESMALL, LOCINFO, INFORECT, LOCRESET, RESETRECT, FONTSIZELARGE, EFFECTS
+    global LOCNAMEPLATE1, LOCNAMEPLATE2, NAMEPLATE1RECT,NAMEPLATE2RECT
+
     pygame.init()
     GLOBALCLOCK = pygame.time.Clock()
     WINDOWSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     pygame.display.set_caption('Battleship362')
+
     #Background
     IMAGES['background'] = pygame.image.load('images/background.jpg').convert_alpha()
 
@@ -37,6 +40,15 @@ def main():
     RESETRECT = LOCRESET.get_rect()
     RESETRECT.topleft = (WINDOWWIDTH - 500, WINDOWHEIGHT - 750)
 
+
+    LOCNAMEPLATE1 = FONTSIZESMALL.render("Enemy", True, COLTEXT)
+    NAMEPLATE1RECT = LOCNAMEPLATE1.get_rect()
+    NAMEPLATE1RECT.topleft = (WINDOWWIDTH - 700, WINDOWHEIGHT - 550)
+    LOCNAMEPLATE2 = FONTSIZESMALL.render("You", True, COLTEXT)
+    NAMEPLATE2RECT = LOCNAMEPLATE2.get_rect()
+    NAMEPLATE2RECT.topleft = (WINDOWWIDTH - 700, WINDOWHEIGHT - 650)
+
+    
     # IMAGES, can add more in and cycle through
     EFFECTS = [pygame.image.load("../Images/explosion.png")]
 
@@ -70,13 +82,20 @@ def main_game_loop():
 
     # Keeps track of what the AI has selected in a matrix
     matrix = [[0 for x in range(10)] for y in range(10)]
+
     while True:
         # Background, Buttons, Boards
         WINDOWSURFACE.fill(COLBACKGROUND)
         WINDOWSURFACE.blit(LOCINFO, INFORECT)
         WINDOWSURFACE.blit(LOCRESET, RESETRECT)
+        WINDOWSURFACE.blit(LOCNAMEPLATE1,NAMEPLATE1RECT)
+        WINDOWSURFACE.blit(LOCNAMEPLATE2,NAMEPLATE2RECT)
+        
         draw_boards(user_board, shown_user_tiles, 1)
         draw_boards(opponent_board, shown_opponent_tiles, 2)
+
+        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 70, 300, 300), 5)     # Board border
+        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 438, 300, 300), 5)    # Board2 border
 
         mouse_clicked = False
 
