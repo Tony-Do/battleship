@@ -60,13 +60,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="5271" />
+          <entry key="py" value="5537" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="5270" />
+          <entry key="Python" value="5536" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -92,8 +92,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/battleship.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="362">
-              <caret line="78" column="73" selection-start-line="78" selection-start-column="73" selection-end-line="78" selection-end-column="73" />
+            <state relative-caret-position="490">
+              <caret line="88" column="93" lean-forward="true" selection-start-line="88" selection-start-column="93" selection-end-line="88" selection-end-column="93" />
               <folding>
                 <element signature="e#47#73#0" expanded="true" />
               </folding>
@@ -503,8 +503,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/battleship.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="78" column="73" selection-start-line="78" selection-start-column="73" selection-end-line="78" selection-end-column="73" />
+        <state relative-caret-position="490">
+          <caret line="88" column="93" lean-forward="true" selection-start-line="88" selection-start-column="93" selection-end-line="88" selection-end-column="93" />
           <folding>
             <element signature="e#47#73#0" expanded="true" />
           </folding>
