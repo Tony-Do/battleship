@@ -175,6 +175,8 @@ class Field:
 
 class AI(Player):
 
+    print("Hello World")
+
     def __init__(self):
 
         # PLACE SHIPS

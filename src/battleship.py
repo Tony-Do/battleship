@@ -1,4 +1,3 @@
-
 """
 Battleship362
 Sam
@@ -10,6 +9,7 @@ Tony
 import pygame, sys, random
 from pygame.locals import *
 from globals import *
+
 
 def main():
     """
@@ -56,7 +56,6 @@ def main_game_loop():
     # Create game boards
     user_board = make_board(None)
     opponent_board = make_board(None)
-
     shipSet = ["battleship", "cruiser", "destroyer", "submarine"]
 
     # Add ships to each board
@@ -66,6 +65,9 @@ def main_game_loop():
     # Tuple of mouse position
     mouse_x_pos, mouse_y_pos = 0, 0
 
+    # Keeps track of what the AI has selected in a matrix
+    matrix = [[0 for x in range(10)] for y in range(10)]
+
     while True:
         # Background, Buttons, Boards
         WINDOWSURFACE.fill(COLBACKGROUND)
@@ -73,6 +75,8 @@ def main_game_loop():
         WINDOWSURFACE.blit(LOCRESET, RESETRECT)
         draw_boards(user_board, shown_user_tiles, 1)
         draw_boards(opponent_board, shown_opponent_tiles, 2)
+        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 70, 300, 300), 2)
+        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 437, 300, 300), 2)
 
         mouse_clicked = False
 
@@ -92,12 +96,12 @@ def main_game_loop():
                 mouse_x_pos, mouse_y_pos = event.pos  # update mouse pos
 
         tile_x_pos, tile_y_pos = find_tile_at(mouse_x_pos, mouse_y_pos)
-        if tile_x_pos is not None and tile_y_pos is not None: # Click mouse on tile for different states
+        if tile_x_pos is not None and tile_y_pos is not None:  # Click mouse on tile for different states
             if not shown_user_tiles[tile_x_pos][tile_y_pos]:  # Has no fog of war
                 mouseover_highlight(tile_x_pos, tile_y_pos)
             if not shown_user_tiles[tile_x_pos][tile_y_pos] and mouse_clicked:  # Has fog of war
                 reveal_tile_animation(user_board, [(tile_x_pos, tile_y_pos)])
-                shown_user_tiles[tile_x_pos][tile_y_pos] = True # Remove fog of war
+                shown_user_tiles[tile_x_pos][tile_y_pos] = True  # Remove fog of war
                 if check_revealed_tile(user_board, [(tile_x_pos, tile_y_pos)]):  # Correct selection of ship
                     left, top = find_top_left_pos(tile_x_pos, tile_y_pos, 1)
                     effect_animation((left, top))
@@ -105,25 +109,45 @@ def main_game_loop():
                         return "USER"
                     if check_for_win(opponent_board, shown_opponent_tiles):
                         return "AI"
-                ai_turn()
+                ai_turn(user_board, shown_opponent_tiles, check_revealed_tile, user_board, shown_user_tiles, matrix)
 
         pygame.display.update()
         GLOBALCLOCK.tick(GAMEFPS)
 
 
-def ai_turn():
+def ai_turn(opponent_board, shown_opponent_tiles, check_reveal_tile, user_board, shown_user_tiles, matrix):
     """
     Function gives the AI their turn. Decides the tile to click through ai_find_tile.
     Clicks returned tile, reveals on board 2.
     Displays if the AI shot was a hit or miss.
     """
-    ai_find_tile()
+    AI_X, AI_Y = ai_find_tile(opponent_board, matrix)
+    if AI_X is not None and AI_Y is not None:
+        if not shown_opponent_tiles[AI_X][AI_Y]:
+            mouseover_highlight(AI_X, AI_Y)
+        if not shown_opponent_tiles[AI_X][AI_Y]:
+            reveal_tile_animation(opponent_board, [(AI_X, AI_Y)])
+            shown_opponent_tiles[AI_X][AI_Y] = True
+            if check_reveal_tile(opponent_board, [(AI_X, AI_Y)]):
+                left, top = find_top_left_pos(AI_X, AI_Y, 1)
+                effect_animation((left, top))
+                if check_for_win(user_board, shown_user_tiles):
+                    return "USERS"
+                if check_for_win(opponent_board, shown_opponent_tiles):
+                    return "AI"
 
 
-def ai_find_tile():
+def ai_find_tile(user_board, matrix):
     """
     Chooses a random tile
     """
+    ## check through the matrix to make sure it hasn't been selected already##
+    tile_x_pos = random.randint(0, 9)
+    print(tile_x_pos)
+    tile_y_pos = random.randint(0, 9)
+    print(tile_y_pos)
+
+    return tile_x_pos, tile_y_pos
 
 
 def make_board(entry_tile_value):
@@ -254,7 +278,8 @@ def random_shipset_placement(board, ships):
                 ship_length = 2
 
             # valid_pos set to true if ship placement is valid
-            valid_pos, ship_coords = add_ship(new_board, xStartpos, yStartpos, orientationisHorizontal, ship_length, ship)
+            valid_pos, ship_coords = add_ship(new_board, xStartpos, yStartpos, orientationisHorizontal, ship_length,
+                                              ship)
 
             if valid_pos:
                 for coord in ship_coords:
@@ -397,6 +422,7 @@ def game_end_display(winner):
     while check_for_key_up() is None:
         pygame.display.update()
         GLOBALCLOCK.tick()
+
 
 def game_intro_display():
     """
