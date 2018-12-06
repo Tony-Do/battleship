@@ -4,6 +4,7 @@
     <list default="true" id="748bc017-705c-4003-ac83-39fa1bd841b4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/battleship.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/battleship.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/globals.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,23 +52,24 @@
     <session id="-1824424659">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="10" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.4" value="5" />
           <entry key="project.open.time.5" value="2" />
+          <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="10" />
+          <entry key="project.opened" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="5566" />
+          <entry key="py" value="6681" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="5565" />
+          <entry key="Python" value="6680" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -93,8 +95,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/battleship.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="149" column="60" selection-start-line="149" selection-start-column="60" selection-end-line="149" selection-end-column="60" />
+            <state relative-caret-position="546">
+              <caret line="521" column="82" selection-start-line="521" selection-start-column="82" selection-end-line="521" selection-end-column="82" />
               <folding>
                 <element signature="e#48#74#0" expanded="true" />
               </folding>
@@ -105,8 +107,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/globals.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+            <state relative-caret-position="442">
+              <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -135,7 +137,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/globalsfile.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
+            <state relative-caret-position="629">
               <caret line="37" selection-start-line="37" selection-end-line="37" />
             </state>
           </provider>
@@ -192,6 +194,10 @@
       <find>highlig</find>
       <find>find_top</find>
       <find>effect_animation</find>
+      <find>mouseover_highlight</find>
+      <find>checkMatrix</find>
+      <find>check_reveal_tile</find>
+      <find>check_revealed_tile</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -206,11 +212,11 @@
         <option value="$PROJECT_DIR$/src/player.py" />
         <option value="$PROJECT_DIR$/src/GUI.py" />
         <option value="$PROJECT_DIR$/src/game.py" />
-        <option value="$PROJECT_DIR$/src/globals.py" />
         <option value="$PROJECT_DIR$/src/globalsfile.py" />
         <option value="$PROJECT_DIR$/src/statushandler.py" />
         <option value="$PROJECT_DIR$/src/statusFile" />
         <option value="$PROJECT_DIR$/src/statusFile.py" />
+        <option value="$PROJECT_DIR$/src/globals.py" />
         <option value="$PROJECT_DIR$/src/battleship.py" />
       </list>
     </option>
@@ -404,7 +410,7 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32959184" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.15204081" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -452,16 +458,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1377">
           <caret line="81" column="32" selection-start-line="81" selection-start-column="32" selection-end-line="81" selection-end-column="32" />
-          <folding>
-            <element signature="e#10#21#0" expanded="true" />
-            <marker date="1540057861195" expanded="true" signature="2031:2129" ph="..." />
-            <marker date="1540057861195" expanded="true" signature="2199:2235" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/statushandler.py" />
     <entry file="file://$PROJECT_DIR$/src/statusFile" />
+    <entry file="file://$PROJECT_DIR$/src/statusFile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="39" selection-start-column="39" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/game.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="952">
@@ -469,6 +477,13 @@
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/globalsfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
         </state>
       </provider>
     </entry>
@@ -496,31 +511,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/statusFile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="39" selection-start-column="39" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/globalsfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/globals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        <state relative-caret-position="442">
+          <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/battleship.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="149" column="60" selection-start-line="149" selection-start-column="60" selection-end-line="149" selection-end-column="60" />
+        <state relative-caret-position="546">
+          <caret line="521" column="82" selection-start-line="521" selection-start-column="82" selection-end-line="521" selection-end-column="82" />
           <folding>
             <element signature="e#48#74#0" expanded="true" />
           </folding>

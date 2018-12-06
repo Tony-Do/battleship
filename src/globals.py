@@ -2,6 +2,8 @@
 RED = (255, 0, 0)
 BLUE = (0, 50, 255)
 ORANGE = (255, 69, 0)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 COLBACKGROUND = (70, 60, 60)
 COLBUTTON = RED
 COLTEXT = RED
@@ -22,7 +24,7 @@ BUTTONHEIGHT = 40
 BUTTONWIDTH = 60
 
 TEXTSIZE = 25       # Size of the text
-TEXTPOS = 10        # Where the text will be positioned
+TEXTPOS = 20        # Where the text will be positioned
 
 EFFECTFPS = 15      # FPS for effects
 GAMEFPS = 100       # FPS for overall game
@@ -34,4 +36,6 @@ BOARDONEYPOINT = (((WINDOWHEIGHT - (BOARDYTILES * TILESIZE)) / 2) - 220)
 
 BOARDTWOXPOINT = (((WINDOWWIDTH - (BOARDXTILES * TILESIZE) - BOARDAREA) / 2) - 320)
 BOARDTWOYPOINT = (((WINDOWHEIGHT - (BOARDYTILES * TILESIZE)) / 2) + 150)
+
+
 

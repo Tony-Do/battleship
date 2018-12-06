@@ -18,7 +18,7 @@ def main():
     Setup of game components
     """
     global WINDOWSURFACE, GLOBALCLOCK, FONTSIZESMALL, LOCINFO, INFORECT, LOCRESET, RESETRECT, FONTSIZELARGE, EFFECTS
-    global LOCNAMEPLATE1, LOCNAMEPLATE2, NAMEPLATE1RECT,NAMEPLATE2RECT
+    global LOCNAMEPLATE1, LOCNAMEPLATE2, NAMEPLATE1RECT, NAMEPLATE2RECT, AILASTHIT
 
     pygame.init()
     GLOBALCLOCK = pygame.time.Clock()
@@ -94,8 +94,11 @@ def main_game_loop():
         draw_boards(user_board, shown_user_tiles, 1)
         draw_boards(opponent_board, shown_opponent_tiles, 2)
 
-        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 70, 300, 300), 5)     # Board border
-        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 438, 300, 300), 5)    # Board2 border
+        pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (0, 0, 1200, 800), 25)  # screen border
+        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 70, 300, 300), 2)     # Board border
+        pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 438, 300, 300), 2)    # Board2 border
+        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 305, WINDOWHEIGHT - 752, 58, 25), 2)  # help border
+        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 505, WINDOWHEIGHT - 752, 70, 25), 2)  # reset border
 
         mouse_clicked = False
 
@@ -128,13 +131,17 @@ def main_game_loop():
                         return "USER"
                     if check_for_win(opponent_board, shown_opponent_tiles):
                         return "AI"
-                ai_turn(user_board,shown_opponent_tiles,check_revealed_tile,user_board,shown_user_tiles,matrix)
+                ai_turn(user_board,shown_opponent_tiles,user_board,shown_user_tiles,matrix)
+                if check_for_win(user_board, shown_user_tiles):
+                    return "USER"
+                if check_for_win(opponent_board, shown_opponent_tiles):
+                    return "AI"
 
         pygame.display.update()
         GLOBALCLOCK.tick(GAMEFPS)
 
 
-def ai_turn(opponent_board,shown_opponent_tiles,check_reveal_tile,user_board,shown_user_tiles,matrix):
+def ai_turn(opponent_board, shown_opponent_tiles, user_board, shown_user_tiles, matrix):
     """
     Function gives the AI their turn. Decides the tile to click through ai_find_tile.
     Clicks returned tile, reveals on board 2.
@@ -143,18 +150,16 @@ def ai_turn(opponent_board,shown_opponent_tiles,check_reveal_tile,user_board,sho
     AI_X, AI_Y = ai_find_tile(opponent_board, matrix)
     if AI_X is not None and AI_Y is not None:
         if not shown_opponent_tiles[AI_X][AI_Y]:
-            mouseover_highlight(AI_X, AI_Y)
-        if not shown_opponent_tiles[AI_X][AI_Y]:
             shown_opponent_tiles[AI_X][AI_Y] = True
-            if check_reveal_tile(opponent_board, [(AI_X, AI_Y)]):
-                left, top = find_top_left_pos(AI_X, AI_Y, 1)
+            if check_revealed_tile(opponent_board, [(AI_X, AI_Y)]):
+                print("Hit at " + str(AI_X) + ", " + str(AI_Y))
                 if check_for_win(user_board,shown_user_tiles):
                     return "USERS"
                 if check_for_win(opponent_board, shown_opponent_tiles):
                     return "AI"
 
 
-def ai_find_tile(opponent_board,matrix):
+def ai_find_tile(opponent_board, matrix):
     """
     Chooses a random tile
     """
@@ -164,8 +169,8 @@ def ai_find_tile(opponent_board,matrix):
     while(usable):
         tile_x_pos = random.randint(0,9)
         tile_y_pos = random.randint(0,9)
-        usable = checkMatrix(tile_x_pos, tile_y_pos, matrix)
-        if usable == True:
+        usable = check_matrix(tile_x_pos, tile_y_pos, matrix)
+        if usable is True:
             matrix[tile_x_pos][tile_y_pos] = 1
             usable = False
         else:
@@ -174,12 +179,13 @@ def ai_find_tile(opponent_board,matrix):
     return tile_x_pos, tile_y_pos
 
 
-def checkMatrix(tile_x_pos, tile_y_pos, matrix):
-    if matrix[tile_x_pos][tile_y_pos] == 1:
+def check_matrix(tile_x_pos, tile_y_pos, matrix):
+    if matrix[tile_x_pos][tile_y_pos] == 1 or matrix[tile_x_pos][tile_y_pos] == 2:
         return False
     if matrix[tile_x_pos][tile_y_pos] == 0:
         return True
-    
+
+
 def make_board(entry_tile_value):
     """
     Creates y-tiles by x-tiles with an entry value passed in
@@ -209,9 +215,9 @@ def check_revealed_tile(board, tile):
 
 def reveal_tile_animation(board, tile_to_reveal):
     """
-    Uncover tiles
+    Uncover tiles, explosion animation is CLICKSPEED
     """
-    for covered in range(TILESIZE, (-CLICKSPEED) - 1, -CLICKSPEED):  # Plays animation based on reveal speed
+    for covered in range(TILESIZE, (-CLICKSPEED) - 1, -CLICKSPEED):
         draw_tile_surface(board, tile_to_reveal, covered)
 
 
@@ -386,16 +392,50 @@ def info_display():
     """
     Display info  screen
     """
-    infoSurface, infoRectangle = create_writable_object('Insert any instructions here', FONTSIZESMALL, COLTEXT)
-    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 60)
-    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+    pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (0, 0, 1200, 800), 25)  # border
 
-    infoSurface, infoRectangle = create_writable_object('BATTLESHIP', FONTSIZESMALL, COLTEXT)
-    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 120)
-    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+    menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, COL3DTEXT)
+    menuRectangle.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2)-320)
+    WINDOWSURFACE.blit(menuSurface, menuRectangle)
+
+    menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, COLTEXT)
+    menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2)-325)
+    WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
     infoSurface, infoRectangle = create_writable_object('Sink your opponents fleet!', FONTSIZESMALL, COLTEXT)
+    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 90)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('Target and sink enemy ships while', FONTSIZESMALL, COLTEXT)
     infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 150)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('they are hidden by the fog of war.', FONTSIZESMALL, COLTEXT)
+    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 180)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('Destroy all enemy ships before ', FONTSIZESMALL, COLTEXT)
+    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 210)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('your fleet is gone.', FONTSIZESMALL, COLTEXT)
+    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 240)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    pygame.draw.rect(WINDOWSURFACE, COLSHIP, (450, 500, 25, 25), 25)  #
+    pygame.draw.rect(WINDOWSURFACE, COLTILE, (450, 300, 25, 25), 25)  #
+    pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (450, 400, 25, 25), 25)  #
+
+    infoSurface, infoRectangle = create_writable_object('Damaged ships', FONTSIZESMALL, BLACK)
+    infoRectangle.topleft = (TEXTPOS + 500, TEXTSIZE + 480)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('Friendly ships hidden by fog of war', FONTSIZESMALL, BLACK)
+    infoRectangle.topleft = (TEXTPOS + 500, TEXTSIZE + 380)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('Untargeted waters', FONTSIZESMALL, BLACK)
+    infoRectangle.topleft = (TEXTPOS + 500, TEXTSIZE + 280)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
     while check_for_key_up() is None:
@@ -427,6 +467,8 @@ def game_end_display(winner):
     Displays end screen
     """
     WINDOWSURFACE.fill(COLBACKGROUND)
+
+    pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (0, 0, 1200, 800), 25)  # border
 
     menuSurface, menuRectangle = create_writable_object('Oh yeah!', FONTSIZELARGE, COL3DTEXT)
     menuRectangle.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2))
@@ -461,25 +503,26 @@ def game_intro_display():
     WINDOWSURFACE.blit(IMAGES['background'],(0,0))
     
 
-    menuSurface, menuRectangle = create_writable_object('Welcome!', FONTSIZELARGE, COL3DTEXT)
+    menuSurface, menuRectangle = create_writable_object('Welcome!', FONTSIZELARGE, BLACK)
     menuRectangle.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2 - 200))
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('Welcome!', FONTSIZELARGE, COLTEXT)
+    menuSurface, menuRectangle = create_writable_object('Welcome!', FONTSIZELARGE, WHITE)
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2 - 200) - 5)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('Lets Play Battleship.', FONTSIZELARGE, COL3DTEXT)
+    menuSurface, menuRectangle = create_writable_object('Lets Play Battleship.', FONTSIZELARGE, BLACK)
     menuRectangle.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2 - 50))
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('Lets Play Battleship.', FONTSIZELARGE, COLTEXT)
+    menuSurface, menuRectangle = create_writable_object('Lets Play Battleship.', FONTSIZELARGE, WHITE)
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2 - 50) - 5)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    pressKeySurf, pressKeyRect = create_writable_object('Press any key to play', FONTSIZESMALL, COLTEXT)
-    pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
-    WINDOWSURFACE.blit(pressKeySurf, pressKeyRect)
+    menuSurface, menuRectangle = create_writable_object('Press any ket to continue.', FONTSIZESMALL, WHITE)
+    menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2 + 300) - 5)
+    WINDOWSURFACE.blit(menuSurface, menuRectangle)
+
 
     while check_for_key_up() is None:
         pygame.display.update()
