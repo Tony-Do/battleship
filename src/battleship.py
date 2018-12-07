@@ -24,6 +24,7 @@ def main():
     GLOBALCLOCK = pygame.time.Clock()
     WINDOWSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     pygame.display.set_caption('Battleship362')
+    pygame.mouse.set_cursor(*pygame.cursors.broken_x)
 
     #Background
     IMAGES['background'] = pygame.image.load('images/background.jpg').convert_alpha()
@@ -34,7 +35,7 @@ def main():
     FONTSIZEMEDIUM = pygame.font.Font('../Fonts/slkscr.ttf', 40)
 
     # BUTTONS
-    LOCINFO = FONTSIZESMALL.render("HELP", True, COLTEXT)
+    LOCINFO = FONTSIZESMALL.render("INFO", True, COLTEXT)
     INFORECT = LOCINFO.get_rect()
     INFORECT.topleft = (WINDOWWIDTH - 300, WINDOWHEIGHT - 100)
     LOCRESET = FONTSIZESMALL.render("RESET", True, COLTEXT)
@@ -172,10 +173,10 @@ def main_game_loop():
                 mouse_x_pos, mouse_y_pos = event.pos  # update mouse pos
 
         tile_x_pos, tile_y_pos = find_tile_at(mouse_x_pos, mouse_y_pos)
-        if tile_x_pos is not None and tile_y_pos is not None: # Click mouse on tile for different states
-            if not shown_user_tiles[tile_x_pos][tile_y_pos]:  # Has no fog of war
+        if tile_x_pos is not None and tile_y_pos is not None:
+            if not shown_user_tiles[tile_x_pos][tile_y_pos]:
                 mouseover_highlight(tile_x_pos, tile_y_pos)
-            if not shown_user_tiles[tile_x_pos][tile_y_pos] and mouse_clicked:  # Has fog of war
+            if not shown_user_tiles[tile_x_pos][tile_y_pos] and mouse_clicked:
                 reveal_tile_animation(user_board, [(tile_x_pos, tile_y_pos)])
                 shown_user_tiles[tile_x_pos][tile_y_pos] = True # Remove fog of war
                 if check_revealed_tile(user_board, [(tile_x_pos, tile_y_pos)]):  # Correct selection of ship
@@ -207,6 +208,7 @@ def ai_turn(opponent_board, shown_opponent_tiles, user_board, shown_user_tiles, 
             shown_opponent_tiles[AI_X][AI_Y] = True
             if check_revealed_tile(opponent_board, [(AI_X, AI_Y)]):
                 print("Hit at " + str(AI_X) + ", " + str(AI_Y))
+                matrix[AI_X][AI_Y] = 2
                 if check_for_win(user_board,shown_user_tiles):
                     return "HUMANS"
                 if check_for_win(opponent_board, shown_opponent_tiles):
@@ -219,16 +221,20 @@ def ai_find_tile(opponent_board, matrix):
     """
     # Check through the matrix to make sure it hasn't been selected already##
     usable = True
-    
-    while(usable):
+    optimization = True
+
+    while(usable and optimization):
         tile_x_pos = random.randint(0,9)
         tile_y_pos = random.randint(0,9)
         usable = check_matrix(tile_x_pos, tile_y_pos, matrix)
-        if usable is True:
-            matrix[tile_x_pos][tile_y_pos] = 1
+        optimization = check_optimized_turn(tile_x_pos, tile_y_pos, matrix, opponent_board)
+        if usable is True and optimization is True: # need to change optimzation to check if adj are ships or just blank
+            matrix[tile_x_pos][tile_y_pos] = 1      # use check_revealed_tile
             usable = False
+            optimization = False
         else:
             usable = True
+            optimization = True
             
     return tile_x_pos, tile_y_pos
 
@@ -238,6 +244,34 @@ def check_matrix(tile_x_pos, tile_y_pos, matrix):
         return False
     if matrix[tile_x_pos][tile_y_pos] == 0:
         return True
+
+
+# never clicks on tile with all 4 adjacent targeted prior
+def check_optimized_turn(tile_x_pos, tile_y_pos, matrix, opponent_board):
+    numOfTargetedAdjacentTiles = 0
+    try:
+        if matrix[tile_x_pos - 1][tile_y_pos] == 1 and matrix[tile_x_pos - 1][tile_y_pos] != 2:
+            numOfTargetedAdjacentTiles += 1
+    except:
+        numOfTargetedAdjacentTiles += 1
+    try:
+        if matrix[tile_x_pos + 1][tile_y_pos] == 1 and matrix[tile_x_pos + 1][tile_y_pos] != 2:
+            numOfTargetedAdjacentTiles += 1
+    except:
+        numOfTargetedAdjacentTiles += 1
+    try:
+        if matrix[tile_x_pos][tile_y_pos + 1] == 1 and matrix[tile_x_pos][tile_y_pos + 1] != 2:
+            numOfTargetedAdjacentTiles += 1
+    except:
+        numOfTargetedAdjacentTiles += 1
+    try:
+        if matrix[tile_x_pos][tile_y_pos - 1] == 1 and matrix[tile_x_pos][tile_y_pos - 1] != 2:
+            numOfTargetedAdjacentTiles += 1
+    except:
+        numOfTargetedAdjacentTiles += 1
+    if numOfTargetedAdjacentTiles == 4:
+        return False
+    return True
 
 
 def make_board(entry_tile_value):
@@ -456,7 +490,15 @@ def info_display():
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2)-325)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    infoSurface, infoRectangle = create_writable_object('Sink your opponents fleet!', FONTSIZESMALL, COLTEXT)
+    menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, COL3DTEXT)
+    menuRectangle.center = (int(WINDOWWIDTH / 2) + 200, int(WINDOWHEIGHT / 2) - 320)
+    WINDOWSURFACE.blit(menuSurface, menuRectangle)
+
+    menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, COLTEXT)
+    menuRectangle.center = (int(WINDOWWIDTH / 2) + 197, int(WINDOWHEIGHT / 2) - 325)
+    WINDOWSURFACE.blit(menuSurface, menuRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('"Sink your opponents fleet!', FONTSIZESMALL, COLTEXT)
     infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 90)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
@@ -472,25 +514,34 @@ def info_display():
     infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 210)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
-    infoSurface, infoRectangle = create_writable_object('your fleet is gone.', FONTSIZESMALL, COLTEXT)
+    infoSurface, infoRectangle = create_writable_object('your fleet is gone."', FONTSIZESMALL, COLTEXT)
     infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 240)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
-    pygame.draw.rect(WINDOWSURFACE, COLSHIP, (450, 500, 25, 25), 25)  # example ship
-    pygame.draw.rect(WINDOWSURFACE, COLTILE, (450, 300, 25, 25), 25)  # example tile
-    pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (450, 400, 25, 25), 25)  # example user hidden ships
-
-    infoSurface, infoRectangle = create_writable_object('Damaged ships', FONTSIZESMALL, BLACK)
-    infoRectangle.topleft = (TEXTPOS + 500, TEXTSIZE + 480)
+    infoSurface, infoRectangle = create_writable_object('This game was made in Python 3.6', FONTSIZESMALL, WHITE)
+    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 300)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
-    infoSurface, infoRectangle = create_writable_object('Friendly ships hidden by fog of war', FONTSIZESMALL, BLACK)
-    infoRectangle.topleft = (TEXTPOS + 500, TEXTSIZE + 380)
+    infoSurface, infoRectangle = create_writable_object('using the PyGame Library.', FONTSIZESMALL, WHITE)
+    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 330)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
-    infoSurface, infoRectangle = create_writable_object('Untargeted waters', FONTSIZESMALL, BLACK)
-    infoRectangle.topleft = (TEXTPOS + 500, TEXTSIZE + 280)
+    infoSurface, infoRectangle = create_writable_object('Authors:', FONTSIZESMALL, WHITE)
+    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 390)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('Kyle Guss', FONTSIZESMALL, WHITE)
+    infoRectangle.topleft = (TEXTPOS+20, TEXTSIZE + 420)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('Tony Do', FONTSIZESMALL, WHITE)
+    infoRectangle.topleft = (TEXTPOS+20, TEXTSIZE + 450)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('Sam Yeaw', FONTSIZESMALL, WHITE)
+    infoRectangle.topleft = (TEXTPOS+20, TEXTSIZE + 480)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
 
     while check_for_key_up() is None:
         pygame.display.update()
