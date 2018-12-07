@@ -18,7 +18,7 @@ def main():
     Setup of game components
     """
     global WINDOWSURFACE, GLOBALCLOCK, FONTSIZESMALL, LOCINFO, INFORECT, LOCRESET, RESETRECT, FONTSIZELARGE, EFFECTS
-    global LOCNAMEPLATE1, LOCNAMEPLATE2, NAMEPLATE1RECT, NAMEPLATE2RECT, AILASTHIT
+    global LOCNAMEPLATE1, LOCNAMEPLATE2, NAMEPLATE1RECT, NAMEPLATE2RECT, AILASTHIT, FONTSIZEMEDIUM
 
     pygame.init()
     GLOBALCLOCK = pygame.time.Clock()
@@ -31,22 +31,23 @@ def main():
     # FONTS
     FONTSIZESMALL = pygame.font.Font('../Fonts/slkscr.ttf', 20)
     FONTSIZELARGE = pygame.font.Font('../Fonts/slkscr.ttf', 50)
+    FONTSIZEMEDIUM = pygame.font.Font('../Fonts/slkscr.ttf', 40)
 
     # BUTTONS
     LOCINFO = FONTSIZESMALL.render("HELP", True, COLTEXT)
     INFORECT = LOCINFO.get_rect()
-    INFORECT.topleft = (WINDOWWIDTH - 300, WINDOWHEIGHT - 750)
+    INFORECT.topleft = (WINDOWWIDTH - 300, WINDOWHEIGHT - 100)
     LOCRESET = FONTSIZESMALL.render("RESET", True, COLTEXT)
     RESETRECT = LOCRESET.get_rect()
-    RESETRECT.topleft = (WINDOWWIDTH - 500, WINDOWHEIGHT - 750)
+    RESETRECT.topleft = (WINDOWWIDTH - 500, WINDOWHEIGHT - 100)
 
 
     LOCNAMEPLATE1 = FONTSIZESMALL.render("Enemy", True, COLTEXT)
     NAMEPLATE1RECT = LOCNAMEPLATE1.get_rect()
-    NAMEPLATE1RECT.topleft = (WINDOWWIDTH - 700, WINDOWHEIGHT - 550)
+    NAMEPLATE1RECT.topleft = (WINDOWWIDTH - 1010, WINDOWHEIGHT - 46)
     LOCNAMEPLATE2 = FONTSIZESMALL.render("You", True, COLTEXT)
     NAMEPLATE2RECT = LOCNAMEPLATE2.get_rect()
-    NAMEPLATE2RECT.topleft = (WINDOWWIDTH - 700, WINDOWHEIGHT - 650)
+    NAMEPLATE2RECT.topleft = (WINDOWWIDTH - 1000, WINDOWHEIGHT - 770)
 
     
     # IMAGES, can add more in and cycle through
@@ -97,8 +98,61 @@ def main_game_loop():
         pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (0, 0, 1200, 800), 25)  # screen border
         pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 70, 300, 300), 2)     # Board border
         pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 438, 300, 300), 2)    # Board2 border
-        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 305, WINDOWHEIGHT - 752, 58, 25), 2)  # help border
-        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 505, WINDOWHEIGHT - 752, 70, 25), 2)  # reset border
+        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 305, WINDOWHEIGHT - 102, 58, 25), 2)  # help border
+        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 505, WINDOWHEIGHT - 102, 70, 25), 2)  # reset border
+
+        pygame.draw.rect(WINDOWSURFACE, COLSHIP, (650, 600, 25, 25), 25)  # example ship
+        pygame.draw.rect(WINDOWSURFACE, COLTILE, (650, 400, 25, 25), 25)  # example tile
+        pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (650, 500, 25, 25), 25)  # example user hidden ships
+
+        infoSurface, infoRectangle = create_writable_object('Damaged ships', FONTSIZESMALL, BLACK)
+        infoRectangle.topleft = (TEXTPOS + 700, TEXTSIZE + 580)
+        WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+        infoSurface, infoRectangle = create_writable_object('Friendly ships hidden by fog of war', FONTSIZESMALL, BLACK)
+        infoRectangle.topleft = (TEXTPOS + 700, TEXTSIZE + 480)
+        WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+        infoSurface, infoRectangle = create_writable_object('Untargeted waters', FONTSIZESMALL, BLACK)
+        infoRectangle.topleft = (TEXTPOS + 700, TEXTSIZE + 380)
+        WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+        menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, COL3DTEXT)
+        menuRectangle.center = (int(WINDOWWIDTH / 2) + 200, int(WINDOWHEIGHT / 2) - 300)
+        WINDOWSURFACE.blit(menuSurface, menuRectangle)
+
+        menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, COLTEXT)
+        menuRectangle.center = (int(WINDOWWIDTH / 2) + 197, int(WINDOWHEIGHT / 2) - 305)
+        WINDOWSURFACE.blit(menuSurface, menuRectangle)
+
+        menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, COL3DTEXT)
+        menuRectangle.center = (int(WINDOWWIDTH / 2) + 400, int(WINDOWHEIGHT / 2) - 300)
+        WINDOWSURFACE.blit(menuSurface, menuRectangle)
+
+        menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, COLTEXT)
+        menuRectangle.center = (int(WINDOWWIDTH / 2) + 397, int(WINDOWHEIGHT / 2) - 305)
+        WINDOWSURFACE.blit(menuSurface, menuRectangle)
+
+        infoSurface, infoRectangle = create_writable_object('Sink your opponents fleet!', FONTSIZESMALL, COLTEXT)
+        infoRectangle.topleft = (TEXTPOS+621, TEXTSIZE + 120)
+        WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+        infoSurface, infoRectangle = create_writable_object('Target and sink enemy ships while', FONTSIZESMALL, COLTEXT)
+        infoRectangle.topleft = (TEXTPOS+621, TEXTSIZE + 180)
+        WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+        infoSurface, infoRectangle = create_writable_object('they are hidden by the fog of war.', FONTSIZESMALL,
+                                                            COLTEXT)
+        infoRectangle.topleft = (TEXTPOS+621, TEXTSIZE + 210)
+        WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+        infoSurface, infoRectangle = create_writable_object('Destroy all enemy ships before ', FONTSIZESMALL, COLTEXT)
+        infoRectangle.topleft = (TEXTPOS+621, TEXTSIZE + 240)
+        WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+        infoSurface, infoRectangle = create_writable_object('your fleet is gone.', FONTSIZESMALL, COLTEXT)
+        infoRectangle.topleft = (TEXTPOS+621, TEXTSIZE + 270)
+        WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
         mouse_clicked = False
 
@@ -128,12 +182,12 @@ def main_game_loop():
                     left, top = find_top_left_pos(tile_x_pos, tile_y_pos, 1)
                     effect_animation((left, top))
                     if check_for_win(user_board, shown_user_tiles):
-                        return "USER"
+                        return "HUMANS"
                     if check_for_win(opponent_board, shown_opponent_tiles):
                         return "AI"
                 ai_turn(user_board,shown_opponent_tiles,user_board,shown_user_tiles,matrix)
                 if check_for_win(user_board, shown_user_tiles):
-                    return "USER"
+                    return "HUMANS"
                 if check_for_win(opponent_board, shown_opponent_tiles):
                     return "AI"
 
@@ -154,7 +208,7 @@ def ai_turn(opponent_board, shown_opponent_tiles, user_board, shown_user_tiles, 
             if check_revealed_tile(opponent_board, [(AI_X, AI_Y)]):
                 print("Hit at " + str(AI_X) + ", " + str(AI_Y))
                 if check_for_win(user_board,shown_user_tiles):
-                    return "USERS"
+                    return "HUMANS"
                 if check_for_win(opponent_board, shown_opponent_tiles):
                     return "AI"
 
@@ -422,9 +476,9 @@ def info_display():
     infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 240)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
-    pygame.draw.rect(WINDOWSURFACE, COLSHIP, (450, 500, 25, 25), 25)  #
-    pygame.draw.rect(WINDOWSURFACE, COLTILE, (450, 300, 25, 25), 25)  #
-    pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (450, 400, 25, 25), 25)  #
+    pygame.draw.rect(WINDOWSURFACE, COLSHIP, (450, 500, 25, 25), 25)  # example ship
+    pygame.draw.rect(WINDOWSURFACE, COLTILE, (450, 300, 25, 25), 25)  # example tile
+    pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (450, 400, 25, 25), 25)  # example user hidden ships
 
     infoSurface, infoRectangle = create_writable_object('Damaged ships', FONTSIZESMALL, BLACK)
     infoRectangle.topleft = (TEXTPOS + 500, TEXTSIZE + 480)
@@ -478,15 +532,15 @@ def game_end_display(winner):
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2) - 5)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object(str(winner) + ' is the Winner', FONTSIZELARGE, COL3DTEXT)
+    menuSurface, menuRectangle = create_writable_object(str(winner) + ' are the Winner', FONTSIZELARGE, COL3DTEXT)
     menuRectangle.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2 + 50))
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object(str(winner) + ' is the Winner', FONTSIZELARGE, COLTEXT)
+    menuSurface, menuRectangle = create_writable_object(str(winner) + ' are the Winner', FONTSIZELARGE, COLTEXT)
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2 + 50) - 5)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    pressKeySurf, pressKeyRect = create_writable_object('Press a key to try to play again', FONTSIZESMALL, COLTEXT)
+    pressKeySurf, pressKeyRect = create_writable_object('Press a key to play again', FONTSIZESMALL, COLTEXT)
     pressKeyRect.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2) + 100)
     WINDOWSURFACE.blit(pressKeySurf, pressKeyRect)
 
