@@ -18,15 +18,17 @@ def main():
     Setup of game components
     """
     global WINDOWSURFACE, GLOBALCLOCK, FONTSIZESMALL, LOCINFO, INFORECT, LOCRESET, RESETRECT, FONTSIZELARGE, EFFECTS
-    global LOCNAMEPLATE1, LOCNAMEPLATE2, NAMEPLATE1RECT, NAMEPLATE2RECT, AILASTHIT, FONTSIZEMEDIUM
+    global LOCNAMEPLATE1, LOCNAMEPLATE2, NAMEPLATE1RECT, NAMEPLATE2RECT, AILASTHIT, FONTSIZEMEDIUM, LOCMUTE, MUTERECT
 
     pygame.init()
     GLOBALCLOCK = pygame.time.Clock()
     WINDOWSURFACE = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     pygame.display.set_caption('Battleship362')
     pygame.mouse.set_cursor(*pygame.cursors.broken_x)
+    pygame.mixer.music.load("../Sounds/Battleship.ogg")
+    pygame.mixer.music.play(-1)
 
-    #Background
+    # BACKGROUND IMAGE FOR INTRO SCREEN
     IMAGES['background'] = pygame.image.load('images/background.jpg').convert_alpha()
 
     # FONTS
@@ -37,10 +39,13 @@ def main():
     # BUTTONS
     LOCINFO = FONTSIZESMALL.render("INFO", True, COLTEXT)
     INFORECT = LOCINFO.get_rect()
-    INFORECT.topleft = (WINDOWWIDTH - 300, WINDOWHEIGHT - 100)
+    INFORECT.topleft = (WINDOWWIDTH - 390, WINDOWHEIGHT - 100)
     LOCRESET = FONTSIZESMALL.render("RESET", True, COLTEXT)
     RESETRECT = LOCRESET.get_rect()
-    RESETRECT.topleft = (WINDOWWIDTH - 500, WINDOWHEIGHT - 100)
+    RESETRECT.topleft = (WINDOWWIDTH - 550, WINDOWHEIGHT - 100)
+    LOCMUTE = FONTSIZESMALL.render("MUTE", True, COLTEXT)
+    MUTERECT = LOCMUTE.get_rect()
+    MUTERECT.topleft = (WINDOWWIDTH - 250, WINDOWHEIGHT - 100)
 
 
     LOCNAMEPLATE1 = FONTSIZESMALL.render("Enemy", True, COLTEXT)
@@ -89,6 +94,7 @@ def main_game_loop():
         # Background, Buttons, Boards
         WINDOWSURFACE.fill(COLBACKGROUND)
         WINDOWSURFACE.blit(LOCINFO, INFORECT)
+        WINDOWSURFACE.blit(LOCMUTE, MUTERECT)
         WINDOWSURFACE.blit(LOCRESET, RESETRECT)
         WINDOWSURFACE.blit(LOCNAMEPLATE1,NAMEPLATE1RECT)
         WINDOWSURFACE.blit(LOCNAMEPLATE2,NAMEPLATE2RECT)
@@ -99,8 +105,9 @@ def main_game_loop():
         pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (0, 0, 1200, 800), 25)  # screen border
         pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 70, 300, 300), 2)     # Board border
         pygame.draw.rect(WINDOWSURFACE, COLBUTTON, (70, 438, 300, 300), 2)    # Board2 border
-        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 305, WINDOWHEIGHT - 102, 58, 25), 2)  # help border
-        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 505, WINDOWHEIGHT - 102, 70, 25), 2)  # reset border
+        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 395, WINDOWHEIGHT - 102, 58, 25), 2)  # help border
+        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 555, WINDOWHEIGHT - 102, 70, 25), 2)  # reset border
+        pygame.draw.rect(WINDOWSURFACE, COLTEXT, (WINDOWWIDTH - 255, WINDOWHEIGHT - 102, 62, 25), 2)  # mute border
 
         pygame.draw.rect(WINDOWSURFACE, COLSHIP, (650, 600, 25, 25), 25)  # example ship
         pygame.draw.rect(WINDOWSURFACE, COLTILE, (650, 400, 25, 25), 25)  # example tile
@@ -118,19 +125,19 @@ def main_game_loop():
         infoRectangle.topleft = (TEXTPOS + 700, TEXTSIZE + 380)
         WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
-        menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, COL3DTEXT)
+        menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, BLACK)
         menuRectangle.center = (int(WINDOWWIDTH / 2) + 200, int(WINDOWHEIGHT / 2) - 300)
         WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-        menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, COLTEXT)
+        menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, WHITE)
         menuRectangle.center = (int(WINDOWWIDTH / 2) + 197, int(WINDOWHEIGHT / 2) - 305)
         WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-        menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, COL3DTEXT)
+        menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, BLACK)
         menuRectangle.center = (int(WINDOWWIDTH / 2) + 400, int(WINDOWHEIGHT / 2) - 300)
         WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-        menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, COLTEXT)
+        menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, WHITE)
         menuRectangle.center = (int(WINDOWWIDTH / 2) + 397, int(WINDOWHEIGHT / 2) - 305)
         WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
@@ -164,6 +171,11 @@ def main_game_loop():
                 if INFORECT.collidepoint(event.pos):  # Access info
                     WINDOWSURFACE.fill(COLBACKGROUND)
                     info_display()
+                if MUTERECT.collidepoint(event.pos):
+                    if pygame.mixer.music.get_volume() == 1.0:
+                        pygame.mixer.music.set_volume(0.0)
+                    else:
+                        pygame.mixer.music.set_volume(1.0)
                 elif RESETRECT.collidepoint(event.pos):  # Reset game
                     main()
                 else:
@@ -542,7 +554,6 @@ def info_display():
     infoRectangle.topleft = (TEXTPOS+20, TEXTSIZE + 480)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
-
     while check_for_key_up() is None:
         pygame.display.update()
         GLOBALCLOCK.tick()
@@ -616,15 +627,15 @@ def game_intro_display():
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2 - 200) - 5)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('Lets Play Battleship.', FONTSIZELARGE, BLACK)
+    menuSurface, menuRectangle = create_writable_object('Lets Play Battleship', FONTSIZELARGE, BLACK)
     menuRectangle.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2 - 50))
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('Lets Play Battleship.', FONTSIZELARGE, WHITE)
+    menuSurface, menuRectangle = create_writable_object('Lets Play Battleship', FONTSIZELARGE, WHITE)
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2 - 50) - 5)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('Press any ket to continue.', FONTSIZESMALL, WHITE)
+    menuSurface, menuRectangle = create_writable_object('Press any ket to continue', FONTSIZESMALL, WHITE)
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2 + 300) - 5)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
