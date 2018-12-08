@@ -27,8 +27,8 @@ def main():
     pygame.display.set_caption('Battleship362')
     pygame.mouse.set_cursor(*pygame.cursors.broken_x)
     pygame.mixer.music.load("../Sounds/Battleship.ogg")
-    pygame.mixer.music.set_volume(0.2)
     pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.2)
 
     # BACKGROUND IMAGE FOR INTRO SCREEN
     IMAGES['background'] = pygame.image.load('images/background.jpg').convert_alpha()
@@ -182,7 +182,7 @@ def main_game_loop():
                     WINDOWSURFACE.fill(COLBACKGROUND)
                     info_display()
                 if MUTERECT.collidepoint(event.pos):
-                    if pygame.mixer.music.get_volume() == 0.2:
+                    if pygame.mixer.music.get_volume() > 0.1:
                         pygame.mixer.music.set_volume(0.0)
                     else:
                         pygame.mixer.music.set_volume(0.2)
