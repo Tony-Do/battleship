@@ -19,6 +19,7 @@ def main():
     """
     global WINDOWSURFACE, GLOBALCLOCK, FONTSIZESMALL, LOCINFO, INFORECT, LOCRESET, RESETRECT, FONTSIZELARGE, EFFECTS
     global LOCNAMEPLATE1, LOCNAMEPLATE2, NAMEPLATE1RECT, NAMEPLATE2RECT, AILASTHIT, FONTSIZEMEDIUM, LOCMUTE, MUTERECT
+    global ARTSIZE, OCEANSIZE
 
     pygame.init()
     GLOBALCLOCK = pygame.time.Clock()
@@ -30,6 +31,14 @@ def main():
 
     # BACKGROUND IMAGE FOR INTRO SCREEN
     IMAGES['background'] = pygame.image.load('images/background.jpg').convert_alpha()
+
+    IMAGES['art'] = pygame.image.load('../Images/art.png')
+    ARTSIZE = IMAGES['art'].get_size()
+    IMAGES['artbigger'] = pygame.transform.scale(IMAGES['art'], (int(ARTSIZE[0]*3), int(ARTSIZE[1]*3)))
+
+    IMAGES['ocean'] = pygame.image.load('../Images/ocean.png')
+    OCEANSIZE = IMAGES['art'].get_size()
+    IMAGES['oceanbigger'] = pygame.transform.scale(IMAGES['ocean'], (int(ARTSIZE[0] * 4), int(ARTSIZE[1] * 1)))
 
     # FONTS
     FONTSIZESMALL = pygame.font.Font('../Fonts/slkscr.ttf', 20)
@@ -492,21 +501,26 @@ def info_display():
     """
     Display info  screen
     """
+
+    WINDOWSURFACE.blit(IMAGES['oceanbigger'], (535, 725))
+    WINDOWSURFACE.blit(IMAGES['oceanbigger'], (13, 725))
+    WINDOWSURFACE.blit(IMAGES['artbigger'], (475, 545))
+
     pygame.draw.rect(WINDOWSURFACE, COLUSERSHIPS, (0, 0, 1200, 800), 25)  # border
 
-    menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, COL3DTEXT)
+    menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, BLACK)
     menuRectangle.center = (int(WINDOWWIDTH / 2), int(WINDOWHEIGHT / 2)-320)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, COLTEXT)
+    menuSurface, menuRectangle = create_writable_object('Battleship', FONTSIZELARGE, WHITE)
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2)-325)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, COL3DTEXT)
+    menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, BLACK)
     menuRectangle.center = (int(WINDOWWIDTH / 2) + 200, int(WINDOWHEIGHT / 2) - 320)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, COLTEXT)
+    menuSurface, menuRectangle = create_writable_object('362', FONTSIZEMEDIUM, WHITE)
     menuRectangle.center = (int(WINDOWWIDTH / 2) + 197, int(WINDOWHEIGHT / 2) - 325)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
@@ -551,8 +565,13 @@ def info_display():
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
 
     infoSurface, infoRectangle = create_writable_object('Sam Yeaw', FONTSIZESMALL, WHITE)
-    infoRectangle.topleft = (TEXTPOS+20, TEXTSIZE + 480)
+    infoRectangle.topleft = (TEXTPOS + 20, TEXTSIZE + 480)
     WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
+    infoSurface, infoRectangle = create_writable_object('Music by Patrick de Arteaga.', FONTSIZESMALL, WHITE)
+    infoRectangle.topleft = (TEXTPOS, TEXTSIZE + 540)
+    WINDOWSURFACE.blit(infoSurface, infoRectangle)
+
 
     while check_for_key_up() is None:
         pygame.display.update()
@@ -635,7 +654,7 @@ def game_intro_display():
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2 - 50) - 5)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
-    menuSurface, menuRectangle = create_writable_object('Press any ket to continue', FONTSIZESMALL, WHITE)
+    menuSurface, menuRectangle = create_writable_object('Press any key to continue', FONTSIZESMALL, WHITE)
     menuRectangle.center = (int(WINDOWWIDTH / 2) - 3, int(WINDOWHEIGHT / 2 + 300) - 5)
     WINDOWSURFACE.blit(menuSurface, menuRectangle)
 
