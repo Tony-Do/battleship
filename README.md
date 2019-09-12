@@ -1,18 +1,3 @@
-# battleship
+Finalized Version can be found at
 
-Description:
------------
-A simple battleship game written using Python. 
-
-Tools Used:
------------
-Language: Python
-GUI Editor: TBA 
-
-Features
----------
-TBA
-
-Installation
--------------
-TBA
+https://github.com/diddlyPop/battleship
